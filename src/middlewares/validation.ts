@@ -1,5 +1,5 @@
 import { AppError } from "@/types";
-import type { NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 import type Joi from "joi";
 
 export const validate = (schema: Joi.ObjectSchema) => {
