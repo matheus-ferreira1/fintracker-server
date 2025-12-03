@@ -30,7 +30,7 @@ class CategoryRepository {
       userId,
       isDefault,
     }));
-    const created = prisma.category.createMany({
+    const created = await prisma.category.createMany({
       data: categoriesWithUser,
     });
 
