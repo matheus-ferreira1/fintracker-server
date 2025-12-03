@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "target": "ES2023",
     "types": ["node"],
     "sourceMap": true,
@@ -44,5 +44,8 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "esModuleInterop": true
+  },
+  "tsx": {
+    "tsconfig": "./tsconfig.json"
   }
 }

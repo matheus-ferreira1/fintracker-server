@@ -36,8 +36,6 @@
     "rimraf": "^6.1.2",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.6",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
@@ -64,7 +62,6 @@
     "dev": "nodemon",
     "build": "rimraf dist && tsc",
     "start": "node dist/index.js",
-    "migrate": "node -r ts-node/register src/database/migrate.ts",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "lint": "eslint . --ext .ts",
