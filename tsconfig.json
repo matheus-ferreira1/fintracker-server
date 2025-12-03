@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "./dist",
-
     "module": "ESNext",
     "moduleResolution": "node",
     "target": "ES2023",
@@ -45,7 +43,6 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "ignoreDeprecations": "6.0"
+    "esModuleInterop": true
   }
 }
