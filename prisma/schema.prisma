@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          String        @id @default(uuid())
+  name        String
+  email       String        @unique
+  password    String
+  createdAt   DateTime      @default(now())
+
+  categories  Category[]
+  transactions Transaction[]
+}
+
+model Category {
+  id          String        @id @default(uuid())
+  name        String
+  color       String
+  type        CategoryType
+  isDefault   Boolean       @default(false)
+
+  userId      String?
+  user        User?         @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime      @default(now())
+
+  transactions Transaction[]
+}
+
+enum CategoryType {
+  income
+  expense
+}
+
+model Transaction {
+  id          String        @id @default(uuid())
+  amount      Decimal       @db.Decimal(10, 2)
+  description String?
+  isRecurring Boolean       @default(false)
+  date        DateTime
+
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+
+  categoryId  String
+  category    Category      @relation(fields: [categoryId], references: [id])
+
+  createdAt   DateTime      @default(now())
+
+  @@index([userId, date])
+  @@index([categoryId])
+  @@index([userId, categoryId])
+}
