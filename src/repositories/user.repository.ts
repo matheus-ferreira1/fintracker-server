@@ -26,10 +26,10 @@ class UserRepository {
   }
 
   async emailExists(email: string): Promise<boolean> {
-    const count = await prisma.user.count({
+    const emailExists = await prisma.user.findFirst({
       where: { email },
     });
-    return count > 0;
+    return !!emailExists;
   }
 
   async emailExistsExcludingUser(

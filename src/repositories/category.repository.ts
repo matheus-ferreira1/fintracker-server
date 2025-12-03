@@ -43,13 +43,9 @@ class CategoryRepository {
     });
   }
 
-  async findByUserId(
-    id: string,
-    userId: string,
-    type: CategoryType
-  ): Promise<Category[] | null> {
+  async findByUserId(userId: string, type: CategoryType): Promise<Category[]> {
     return prisma.category.findMany({
-      where: { id, userId, type },
+      where: { userId, type },
     });
   }
 
@@ -75,9 +71,9 @@ class CategoryRepository {
     return count > 0;
   }
 
-  async delete(id: string) {
+  async delete(id: string, userId: string) {
     return prisma.category.delete({
-      where: { id },
+      where: { id, userId },
     });
   }
 }
