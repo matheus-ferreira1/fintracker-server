@@ -1,0 +1,29 @@
+{
+  "name": "fintracker-server",
+  "version": "1.0.0",
+  "description": "Finance tracking RESTful API with Express and TypeScript",
+  "main": "dist/index.js",
+  "keywords": [
+    "finance",
+    "api",
+    "express",
+    "typescript",
+    "postgresql"
+  ],
+  "author": "Matheus Ferreira",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/pg": "^8.15.6",
+    "prisma": "^7.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.1.0",
+    "@prisma/client": "^7.1.0",
+    "dotenv": "^17.2.3",
+    "pg": "^8.16.3"
+  },
+  "type": "module"
+}
