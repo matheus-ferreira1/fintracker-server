@@ -1,20 +1,8 @@
 import prisma from "@/config/prisma";
 import type { RegisterDTO } from "@/types/auth.types";
 import type { UpdateProfileDTO, UserDTO } from "@/types/user.types";
-import {} from "@prisma/client";
-import type { User } from "generated/prisma/browser";
 
 class UserRepository {
-  private mapToDTO(user: User): UserDTO {
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
-  }
-
   async create(payload: RegisterDTO): Promise<UserDTO> {
     return prisma.user.create({
       data: payload,
