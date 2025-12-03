@@ -63,3 +63,7 @@ export const updateCategorySchema = Joi.object({
       "string.pattern.base": "Color must be a valid hex color (e.g., #FF5733)",
     }),
 }).min(1);
+
+export const uuidParamSchema = Joi.object({
+  id: uuidSchema.required(),
+});
