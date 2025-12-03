@@ -1,6 +1,7 @@
 import prisma from "@/config/prisma";
 import type { RegisterDTO } from "@/types/auth.types";
 import type { UpdateProfileDTO, UserDTO } from "@/types/user.types";
+import type { User } from "generated/prisma/browser";
 
 class UserRepository {
   async create(payload: RegisterDTO): Promise<UserDTO> {
@@ -12,13 +13,13 @@ class UserRepository {
     });
   }
 
-  async findByEmail(email: string): Promise<UserDTO | null> {
+  async findByEmail(email: string): Promise<User | null> {
     return prisma.user.findUnique({
       where: { email },
     });
   }
 
-  async findById(id: string): Promise<UserDTO | null> {
+  async findById(id: string): Promise<User | null> {
     return prisma.user.findUnique({
       where: { id },
     });
