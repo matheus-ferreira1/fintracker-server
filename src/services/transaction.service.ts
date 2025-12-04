@@ -5,6 +5,7 @@ import type {
   AvailablePeriod,
   CreateTransactionDTO,
   GetTransactionsResponse,
+  PaginationMetadata,
   TransactionFilters,
   UpdateTransactionDTO,
 } from "@/types/transaction.types";
@@ -62,6 +63,9 @@ class TransactionService {
     userId: string,
     filters: TransactionFilters
   ): Promise<GetTransactionsResponse> {
+    const page = filters.page || 1;
+    const limit = filters.limit || 10;
+
     let month: number;
     let year: number;
 
@@ -83,27 +87,41 @@ class TransactionService {
     }
 
     const startDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
-
     const endDate = new Date(year, month, 0, 23, 59, 59, 999);
 
-    const transactions = await transactionRepository.findWithFilters(userId, {
+    const filterParams = {
       startDate,
       endDate,
       categoryId: filters.categoryId,
       search: filters.search,
       type: filters.type,
-    });
+    };
 
-    const count = transactions.length;
+    const [result, sum] = await Promise.all([
+      transactionRepository.findWithFilters(userId, filterParams, {
+        page,
+        limit,
+      }),
+      transactionRepository.getSumForFilters(userId, filterParams),
+    ]);
 
-    const sum = transactions.reduce((total, transaction) => {
-      return total + Number(transaction.amount);
-    }, 0);
+    const { transactions, totalItems } = result;
+
+    const totalPages = Math.ceil(totalItems / limit);
+    const pagination: PaginationMetadata = {
+      currentPage: page,
+      totalPages,
+      totalItems,
+      itemsPerPage: limit,
+      hasNextPage: page < totalPages,
+      hasPreviousPage: page > 1,
+    };
 
     return {
       transactions,
-      count,
+      count: totalItems,
       sum,
+      pagination,
     };
   }
 

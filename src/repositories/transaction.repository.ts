@@ -1,6 +1,8 @@
 import prisma from "@/config/prisma";
 import type {
   CreateTransactionDTO,
+  FindWithFiltersResult,
+  PaginationParams,
   UpdateTransactionDTO,
 } from "@/types/transaction.types";
 import type { CategoryType, Transaction } from "generated/prisma/browser";
@@ -65,9 +67,11 @@ class TransactionRepository {
       categoryId: string | undefined;
       search: string | undefined;
       type: CategoryType | undefined;
-    }
-  ): Promise<(Transaction & { category: Category })[]> {
+    },
+    pagination: PaginationParams
+  ): Promise<FindWithFiltersResult> {
     const { startDate, endDate, categoryId, search, type } = filters;
+    const { page, limit } = pagination;
 
     const where: any = {
       userId,
@@ -94,15 +98,78 @@ class TransactionRepository {
       };
     }
 
-    return prisma.transaction.findMany({
-      where,
-      include: {
-        category: true,
+    const skip = (page - 1) * limit;
+
+    const [transactions, totalItems] = await Promise.all([
+      prisma.transaction.findMany({
+        where,
+        include: {
+          category: true,
+        },
+        orderBy: {
+          date: "desc",
+        },
+        skip,
+        take: limit,
+      }),
+      prisma.transaction.count({
+        where,
+      }),
+    ]);
+
+    return {
+      transactions,
+      totalItems,
+    };
+  }
+
+  async getSumForFilters(
+    userId: string,
+    filters: {
+      startDate: Date;
+      endDate: Date;
+      categoryId: string | undefined;
+      search: string | undefined;
+      type: CategoryType | undefined;
+    }
+  ): Promise<number> {
+    const { startDate, endDate, categoryId, search, type } = filters;
+
+    // Build the where clause for filtering
+    const where: any = {
+      userId,
+      date: {
+        gte: startDate,
+        lte: endDate,
       },
-      orderBy: {
-        date: "desc",
+    };
+
+    if (categoryId) {
+      where.categoryId = categoryId;
+    }
+
+    if (search) {
+      where.description = {
+        contains: search,
+        mode: "insensitive",
+      };
+    }
+
+    if (type) {
+      where.category = {
+        type,
+      };
+    }
+
+    // Use aggregate to calculate sum efficiently
+    const result = await prisma.transaction.aggregate({
+      where,
+      _sum: {
+        amount: true,
       },
     });
+
+    return Number(result._sum.amount) || 0;
   }
 }
 

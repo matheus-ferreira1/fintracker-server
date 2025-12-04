@@ -22,6 +22,22 @@ export interface TransactionFilters {
   categoryId?: string;
   search?: string;
   type?: CategoryType;
+  page?: number;
+  limit?: number;
+}
+
+export interface PaginationParams {
+  page: number;
+  limit: number;
+}
+
+export interface PaginationMetadata {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 }
 
 export interface AvailablePeriod {
@@ -35,4 +51,10 @@ export interface GetTransactionsResponse {
   transactions: (Transaction & { category: Category })[];
   count: number;
   sum: number;
+  pagination: PaginationMetadata;
+}
+
+export interface FindWithFiltersResult {
+  transactions: (Transaction & { category: Category })[];
+  totalItems: number;
 }

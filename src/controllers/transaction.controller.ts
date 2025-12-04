@@ -54,6 +54,12 @@ class TransactionController {
     if (req.query.type) {
       filters.type = req.query.type as CategoryType;
     }
+    if (req.query.page) {
+      filters.page = Number.parseInt(req.query.page as string, 10);
+    }
+    if (req.query.limit) {
+      filters.limit = Number.parseInt(req.query.limit as string, 10);
+    }
 
     const result = await transactionService.getTransactions(userId, filters);
 
