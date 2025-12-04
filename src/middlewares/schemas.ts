@@ -67,3 +67,74 @@ export const updateCategorySchema = Joi.object({
 export const uuidParamSchema = Joi.object({
   id: uuidSchema.required(),
 });
+
+export const createTransactionSchema = Joi.object({
+  categoryId: uuidSchema.required().messages({
+    "string.guid": "Category ID must be a valid UUID",
+    "any.required": "Category ID is required",
+  }),
+  amount: Joi.number().positive().precision(2).required().messages({
+    "number.base": "Amount must be a number",
+    "number.positive": "Amount must be a positive number",
+    "any.required": "Amount is required",
+  }),
+  description: Joi.string().min(1).max(500).trim().required().messages({
+    "string.empty": "Description cannot be empty",
+    "string.max": "Description must not exceed 500 characters",
+    "any.required": "Description is required",
+  }),
+  date: dateSchema.required().messages({
+    "string.isoDate": "Date must be a valid ISO 8601 date",
+    "any.required": "Date is required",
+  }),
+  isRecurring: Joi.boolean().required().messages({
+    "boolean.base": "isRecurring must be a boolean",
+    "any.required": "isRecurring is required",
+  }),
+});
+
+export const updateTransactionSchema = Joi.object({
+  categoryId: uuidSchema.messages({
+    "string.guid": "Category ID must be a valid UUID",
+  }),
+  amount: Joi.number().positive().precision(2).messages({
+    "number.base": "Amount must be a number",
+    "number.positive": "Amount must be a positive number",
+  }),
+  description: Joi.string().min(1).max(500).trim().messages({
+    "string.empty": "Description cannot be empty",
+    "string.max": "Description must not exceed 500 characters",
+  }),
+  date: dateSchema.messages({
+    "string.isoDate": "Date must be a valid ISO 8601 date",
+  }),
+  isRecurring: Joi.boolean().messages({
+    "boolean.base": "isRecurring must be a boolean",
+  }),
+})
+  .min(1)
+  .messages({
+    "object.min": "At least one field must be provided for update",
+  });
+
+export const transactionFiltersSchema = Joi.object({
+  period: Joi.string()
+    .pattern(/^(0[1-9]|1[0-2])\d{4}$/)
+    .messages({
+      "string.pattern.base":
+        "Period must be in format MMYYYY (e.g., 012025 for January 2025)",
+    }),
+  categoryId: uuidSchema.messages({
+    "string.guid": "Category ID must be a valid UUID",
+  }),
+  search: Joi.string().min(1).max(100).trim().messages({
+    "string.max": "Search query must not exceed 100 characters",
+  }),
+  type: Joi.string()
+    .valid(...Object.values(CategoryType))
+    .messages({
+      "any.only": `Type must be one of: ${Object.values(CategoryType).join(
+        ", "
+      )}`,
+    }),
+});

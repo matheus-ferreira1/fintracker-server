@@ -38,3 +38,22 @@ export const validateParams = (schema: Joi.ObjectSchema) => {
     next();
   };
 };
+
+export const validateQuery = (schema: Joi.ObjectSchema) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
+    const { error, value } = schema.validate(req.query, {
+      abortEarly: false,
+      stripUnknown: true,
+    });
+
+    if (error) {
+      const errorMessage = error.details
+        .map((detail) => detail.message)
+        .join(", ");
+      throw new AppError(400, errorMessage);
+    }
+
+    req.query = value;
+    next();
+  };
+};
