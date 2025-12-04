@@ -135,7 +135,6 @@ class TransactionRepository {
   ): Promise<number> {
     const { startDate, endDate, categoryId, search, type } = filters;
 
-    // Build the where clause for filtering
     const where: any = {
       userId,
       date: {
@@ -161,7 +160,6 @@ class TransactionRepository {
       };
     }
 
-    // Use aggregate to calculate sum efficiently
     const result = await prisma.transaction.aggregate({
       where,
       _sum: {
