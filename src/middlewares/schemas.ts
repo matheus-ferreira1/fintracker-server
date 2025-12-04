@@ -149,3 +149,12 @@ export const transactionFiltersSchema = Joi.object({
     "number.max": "Limit must not exceed 100",
   }),
 });
+
+export const dashboardFiltersSchema = Joi.object({
+  period: Joi.string()
+    .pattern(/^(0[1-9]|1[0-2])\d{4}$/)
+    .messages({
+      "string.pattern.base":
+        "Period must be in format MMYYYY (e.g., 012025 for January 2025)",
+    }),
+});
