@@ -1,3 +1,4 @@
+import type { Category, Transaction } from "generated/prisma/client";
 import type { CategoryType } from "generated/prisma/enums";
 
 export interface CreateTransactionDTO {
@@ -28,4 +29,10 @@ export interface AvailablePeriod {
   year: number;
   month: number;
   label: string;
+}
+
+export interface GetTransactionsResponse {
+  transactions: (Transaction & { category: Category })[];
+  count: number;
+  sum: number;
 }

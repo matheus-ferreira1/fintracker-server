@@ -55,14 +55,11 @@ class TransactionController {
       filters.type = req.query.type as CategoryType;
     }
 
-    const transactions = await transactionService.getTransactions(
-      userId,
-      filters
-    );
+    const result = await transactionService.getTransactions(userId, filters);
 
     res.status(200).json({
       status: "success",
-      data: transactions,
+      data: result,
     });
   });
 

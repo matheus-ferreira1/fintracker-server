@@ -4,6 +4,7 @@ import { AppError } from "@/types";
 import type {
   AvailablePeriod,
   CreateTransactionDTO,
+  GetTransactionsResponse,
   TransactionFilters,
   UpdateTransactionDTO,
 } from "@/types/transaction.types";
@@ -60,13 +61,11 @@ class TransactionService {
   async getTransactions(
     userId: string,
     filters: TransactionFilters
-  ): Promise<(Transaction & { category: Category })[]> {
-    // Parse the period or use current month/year (December 2025)
+  ): Promise<GetTransactionsResponse> {
     let month: number;
     let year: number;
 
     if (filters.period) {
-      // Validate period format (MMYYYY)
       const periodRegex = /^(0[1-9]|1[0-2])\d{4}$/;
       if (!periodRegex.test(filters.period)) {
         throw new AppError(
@@ -75,31 +74,37 @@ class TransactionService {
         );
       }
 
-      // Extract month and year from period string
       month = Number.parseInt(filters.period.substring(0, 2), 10);
       year = Number.parseInt(filters.period.substring(2), 10);
     } else {
-      // Use current month/year (December 2025)
       const now = new Date();
-      month = now.getMonth() + 1; // getMonth() returns 0-11
+      month = now.getMonth() + 1;
       year = now.getFullYear();
     }
 
-    // Create date range for the month
-    // Start date: first day of the month at 00:00:00
     const startDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
 
-    // End date: last day of the month at 23:59:59.999
     const endDate = new Date(year, month, 0, 23, 59, 59, 999);
 
-    // Call repository with parsed filters
-    return await transactionRepository.findWithFilters(userId, {
+    const transactions = await transactionRepository.findWithFilters(userId, {
       startDate,
       endDate,
       categoryId: filters.categoryId,
       search: filters.search,
       type: filters.type,
     });
+
+    const count = transactions.length;
+
+    const sum = transactions.reduce((total, transaction) => {
+      return total + Number(transaction.amount);
+    }, 0);
+
+    return {
+      transactions,
+      count,
+      sum,
+    };
   }
 
   async updateTransaction(

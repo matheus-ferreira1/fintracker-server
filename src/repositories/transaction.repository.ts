@@ -62,14 +62,13 @@ class TransactionRepository {
     filters: {
       startDate: Date;
       endDate: Date;
-      categoryId?: string | undefined;
-      search?: string | undefined;
-      type?: CategoryType | undefined;
+      categoryId: string | undefined;
+      search: string | undefined;
+      type: CategoryType | undefined;
     }
   ): Promise<(Transaction & { category: Category })[]> {
     const { startDate, endDate, categoryId, search, type } = filters;
 
-    // Build the where clause dynamically based on provided filters
     const where: any = {
       userId,
       date: {
@@ -78,12 +77,10 @@ class TransactionRepository {
       },
     };
 
-    // Add category filter if provided
     if (categoryId) {
       where.categoryId = categoryId;
     }
 
-    // Add search filter for description if provided
     if (search) {
       where.description = {
         contains: search,
@@ -91,8 +88,6 @@ class TransactionRepository {
       };
     }
 
-    // Add type filter if provided
-    // Note: type filter is applied via category relation
     if (type) {
       where.category = {
         type,
