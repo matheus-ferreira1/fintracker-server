@@ -4,6 +4,7 @@ import { errorHandler } from './middleware/error-handler.js';
 import { logger } from './lib/logger.js';
 import authRouter from './auth/auth.router.js';
 import categoryRouter from './categories/category.router.js';
+import transactionRouter from './transactions/transaction.router.js';
 
 export function createApp() {
   const app = express();
@@ -42,6 +43,7 @@ export function createApp() {
 
   app.use('/api/v1/auth', authRouter);
   app.use('/api/v1/categories', categoryRouter);
+  app.use('/api/v1/transactions', transactionRouter);
 
   app.use(errorHandler);
 
