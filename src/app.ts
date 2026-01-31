@@ -3,6 +3,7 @@ import { env } from './config/env.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { logger } from './lib/logger.js';
 import authRouter from './auth/auth.router.js';
+import categoryRouter from './categories/category.router.js';
 
 export function createApp() {
   const app = express();
@@ -40,6 +41,7 @@ export function createApp() {
   });
 
   app.use('/api/v1/auth', authRouter);
+  app.use('/api/v1/categories', categoryRouter);
 
   app.use(errorHandler);
 
