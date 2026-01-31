@@ -16,9 +16,38 @@ A complete backend API for personal finance tracking with authentication, catego
 ## Prerequisites
 
 - [Bun](https://bun.sh) v1.0+
-- PostgreSQL 14+
+- PostgreSQL 14+ OR Docker & Docker Compose
 
 ## Setup
+
+### Option 1: Using Docker (Recommended)
+
+1. Install dependencies:
+```bash
+bun install
+```
+
+2. Start PostgreSQL with Docker:
+```bash
+docker-compose up -d
+```
+
+3. Copy `.env.example` to `.env` (default values work with Docker setup):
+```bash
+cp .env.example .env
+```
+
+4. Run database migrations:
+```bash
+bun run db:migrate
+```
+
+5. Start the development server:
+```bash
+bun run dev
+```
+
+### Option 2: Using Local PostgreSQL
 
 1. Install dependencies:
 ```bash
@@ -41,12 +70,14 @@ Required environment variables:
 - `PORT`: Server port (default: 3000)
 - `ALLOWED_ORIGINS`: Comma-separated CORS origins
 
-4. Run database migrations:
+4. Update `DATABASE_URL` in `.env` with your PostgreSQL credentials
+
+5. Run database migrations:
 ```bash
 bun run db:migrate
 ```
 
-5. Start the development server:
+6. Start the development server:
 ```bash
 bun run dev
 ```
@@ -59,6 +90,12 @@ bun run dev
 - `bun run db:migrate` - Apply pending migrations
 - `bun run db:studio` - Open Drizzle Studio (database GUI)
 - `bun run test` - Run tests
+
+### Docker Commands
+
+- `docker-compose up -d` - Start PostgreSQL in background
+- `docker-compose down` - Stop PostgreSQL
+- `docker-compose logs -f` - View PostgreSQL logs
 
 ## API Endpoints
 
