@@ -2,6 +2,7 @@ import express from 'express';
 import { env } from './config/env.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { logger } from './lib/logger.js';
+import authRouter from './auth/auth.router.js';
 
 export function createApp() {
   const app = express();
@@ -37,6 +38,8 @@ export function createApp() {
   app.get('/health', (_req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
+
+  app.use('/api/v1/auth', authRouter);
 
   app.use(errorHandler);
 
