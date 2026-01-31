@@ -5,6 +5,7 @@ import { logger } from './lib/logger.js';
 import authRouter from './auth/auth.router.js';
 import categoryRouter from './categories/category.router.js';
 import transactionRouter from './transactions/transaction.router.js';
+import dashboardRouter from './dashboard/dashboard.router.js';
 
 export function createApp() {
   const app = express();
@@ -44,6 +45,7 @@ export function createApp() {
   app.use('/api/v1/auth', authRouter);
   app.use('/api/v1/categories', categoryRouter);
   app.use('/api/v1/transactions', transactionRouter);
+  app.use('/api/v1/dashboard', dashboardRouter);
 
   app.use(errorHandler);
 
