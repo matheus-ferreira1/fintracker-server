@@ -116,10 +116,12 @@ export class TransactionRepository {
       .limit(filter.limit)
       .offset(offset);
 
-    const [{ count }] = await db
+    const countResult = await db
       .select({ count: sql<number>`count(*)::int` })
       .from(transactions)
       .where(and(...conditions));
+
+    const count = countResult[0]?.count ?? 0;
 
     return {
       items,

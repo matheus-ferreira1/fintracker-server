@@ -21,6 +21,10 @@ export class AuthService {
       name: input.name,
     });
 
+    if (!user) {
+      throw new Error('Failed to create user');
+    }
+
     const accessToken = signAccessToken({ userId: user.id, email: user.email });
     const refreshToken = signRefreshToken({ userId: user.id, email: user.email });
 

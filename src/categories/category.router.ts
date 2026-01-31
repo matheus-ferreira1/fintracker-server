@@ -56,7 +56,7 @@ router.get(
   validate(getCategorySchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const category = await categoryService.findById(req.params.id, req.user!.userId);
+      const category = await categoryService.findById(req.params.id!, req.user!.userId);
       res.json(category);
     } catch (error) {
       next(error);
@@ -70,7 +70,7 @@ router.patch(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const category = await categoryService.update(
-        req.params.id,
+        req.params.id!,
         req.user!.userId,
         req.body as UpdateCategoryInput,
       );
@@ -86,7 +86,7 @@ router.delete(
   validate(deleteCategorySchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await categoryService.delete(req.params.id, req.user!.userId);
+      await categoryService.delete(req.params.id!, req.user!.userId);
       res.status(204).send();
     } catch (error) {
       next(error);

@@ -10,7 +10,7 @@ export function errorHandler(
   _next: NextFunction,
 ): void {
   if (err instanceof ZodError) {
-    const validationError = new ValidationError('Validation failed', err.errors);
+    const validationError = new ValidationError('Validation failed', err.issues);
     res.status(validationError.statusCode).json({
       error: {
         message: validationError.message,

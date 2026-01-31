@@ -58,7 +58,7 @@ router.get(
   validate(getTransactionSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const transaction = await transactionService.findById(req.params.id, req.user!.userId);
+      const transaction = await transactionService.findById(req.params.id!, req.user!.userId);
       res.json(transaction);
     } catch (error) {
       next(error);
@@ -72,7 +72,7 @@ router.patch(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const transaction = await transactionService.update(
-        req.params.id,
+        req.params.id!,
         req.user!.userId,
         req.body as UpdateTransactionInput,
       );
@@ -88,7 +88,7 @@ router.delete(
   validate(deleteTransactionSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await transactionService.delete(req.params.id, req.user!.userId);
+      await transactionService.delete(req.params.id!, req.user!.userId);
       res.status(204).send();
     } catch (error) {
       next(error);
